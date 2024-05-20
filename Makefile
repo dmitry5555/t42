@@ -4,10 +4,12 @@ up:
 down:
 	docker-compose down
 
+build:
+	docker-compose build
 # Docker cleanup target
 clean:
 	docker-compose down --volumes --remove-orphans
 
-cleanf:
+fclean:
 	docker-compose down --volumes --remove-orphans
 	docker system prune -f
