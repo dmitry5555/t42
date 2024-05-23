@@ -1,7 +1,9 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json
+import random
 
 class TestConsumer(AsyncWebsocketConsumer):
+	count = 0
 	async def connect(self):
 		await self.accept()
 
@@ -15,4 +17,5 @@ class TestConsumer(AsyncWebsocketConsumer):
 		# await self.send(text_data=json.dumps({
 		#     'message': message
 		# }))
-		await self.send('hello')
+		self.count = str(random.randint(1, 9)) + ', ' + str(random.randint(1, 9))
+		await self.send(self.count)

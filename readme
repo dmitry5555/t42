@@ -5,3 +5,4 @@ docker-compose -f ./docker-compose.yml up -d
 localhost:8000
 localhost:3000
 
+https://circumeo.io/blog/entry/django-websockets/
