@@ -28,6 +28,10 @@ DEBUG = True
 
 # ALLOWED_HOSTS = []
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://localhost',
+    'https://127.0.0.1',
+] 
 
 # Application definition
 
@@ -165,11 +169,11 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 REST_FRAMEWORK = {
     'STATIC_URL': STATIC_URL,
 	'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 	'DEFAULT_PERMISSION_CLASSES': (
-        # 'rest_framework.permissions.IsAuthenticated',
-		'rest_framework.permissions.AllowAny',  # Разрешить доступ ко всем маршрутам без аутентификации
+        'rest_framework.permissions.IsAuthenticated',
+		# 'rest_framework.permissions.AllowAny',  # Разрешить доступ ко всем маршрутам без аутентификации
     )
 }
 
@@ -191,6 +195,7 @@ SIMPLE_JWT = {
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',
+	# если пользователь активен
     # 'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
 
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),

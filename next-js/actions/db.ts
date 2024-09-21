@@ -5,27 +5,115 @@ import { cookies } from 'next/headers'
 // import jwt_decode from 'jwt-decode'
 // import jwt, { JwtPayload } from 'jsonwebtoken'
 
-export const signIn = async (username: string, password: string) => {
+// export const signUp = async (username: string, password: string) => {
 
-	const response = await fetch('http://localhost:8000/api/token/', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({ username, password }),
-		credentials: 'include', // Включаем отправку и получение куки
-	});
+// 	try{
+// 		const response = await fetch('api/users/', {
+// 			method: 'POST',
+// 			headers: {
+// 				'Content-Type': 'application/json',
+// 			},
+// 			body: JSON.stringify({ username, password }),
+// 			// credentials: 'include', // Включаем отправку и получение куки
+// 		});
 
-	if (!response.ok) {
-		throw Error(`HTTP error ${response.status}`);
+// 		if (!response.ok) {
+// 			throw Error(`HTTP error ${response.status}`);
+// 		}
+// 		const res = await response.json();
+
+// 		console.log(res)
+	
+//   };
+
+export const setToken = async (token: any) => {
+	cookies().set('access_token', token.access)
+	cookies().set('refresh_token', token.refresh)
+}
+
+export const signUp = async (username: string, password: string) => {
+
+	const userData = {
+		username: username,
+		password: password,
+		email: username,
+	};
+
+	try {
+		const response = await fetch('https://localhost/api/users/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(userData),
+		});
+
+		if (response.ok) {
+			console.log('Пользователь успешно создан!');
+		} else {
+			console.error('Ошибка создания пользователя:', response.statusText);
+		}
+	} catch (error) {
+		console.error('Ошибка создания пользователя:', error);
 	}
 
-	// console.log('access_token:', access_token)
-	const access_token = await response.json();
-	cookies().set('access_token', access_token.access)
-	cookies().set('refresh_token', access_token.refresh)
+}
 
-  };
+export const signIn = async (username: string, password: string) => {
+
+	const userData = {
+		username: username,
+		password: password,
+		// email: username,
+	};
+
+	try {
+		const response = await fetch('https://localhost/api/token/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(userData),
+		});
+
+		if (response.ok) {
+			console.log('Пользователь успешно создан!');
+			const access_token = await response.json();
+			cookies().set('access_token', access_token.access)
+			cookies().set('refresh_token', access_token.refresh)
+		} else {
+			console.error('Ошибка создания пользователя:', response.statusText);
+		}
+	} catch (error) {
+		console.error('Ошибка создания пользователя:', error);
+	}
+
+	
+
+}
+
+
+// export const signIn = async (username: string, password: string) => {
+
+// 	const response = await fetch('api/token/', {
+// 		method: 'POST',
+// 		headers: {
+// 			'Content-Type': 'application/json',
+// 		},
+// 		body: JSON.stringify({ username, password }),
+// 		// credentials: 'include', // Включаем отправку и получение куки
+// 	});
+
+// 	if (!response.ok) {
+// 		throw Error(`HTTP error ${response.status}`);
+// 	}
+
+// 	// console.log('access_token:', access_token)
+// 	const access_token = await response.json();
+// 	cookies().set('access_token', access_token.access)
+// 	cookies().set('refresh_token', access_token.refresh)
+
+//   };
 
 
 export const requestOtp = async (username: string, password: string) => {

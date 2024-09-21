@@ -1,18 +1,21 @@
 from rest_framework import serializers
-from .models import Games, Image
+from .models import Games, Image, Profile
 from django.contrib.auth.models import User
-
-# class UserSerializer(serializers.ModelSerializer):
-# 	class Meta:
-# 		model = Users
-# 		fields = ['id', 'nickname', 'username', 'password', 'avatar', 'created_at', 'updated_at']
-# 		extra_kwargs = {'password': {'write_only': True}}
 
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
 		fields = ['id', 'username', 'email', 'password']
-		extra_kwargs = {'password': {'write_only': True, 'min_length': 8}}
+		extra_kwargs = {'password': {'write_only': True}}
+	
+	def create(self, validated_data):
+		user = User(
+			email=validated_data['email'],
+			username=validated_data['username']
+		)
+		user.set_password(validated_data['password'])
+		user.save()
+		return user
 
 class GameSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -20,9 +23,9 @@ class GameSerializer(serializers.ModelSerializer):
 		fields = ['id', 'user_one_id', 'user_two_id', 'user_one_score', 'user_two_score', 'created_at', 'updated_at', 'status']
 	
 class ImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Image
-        fields = ('id', 'image', 'uploaded_at')
+	class Meta:
+		model = Image
+		fields = ('id', 'image', 'uploaded_at')
 
 class OTPRequestSerializer(serializers.Serializer):
 	username = serializers.CharField()
@@ -30,3 +33,8 @@ class OTPRequestSerializer(serializers.Serializer):
 class OTPVerifySerializer(serializers.Serializer):
 	username = serializers.CharField()
 	otp = serializers.CharField()
+
+class ProfileSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Profile
+		fields = ['id', 'user_id', 'created_at', 'avatar_url', 'is_online']

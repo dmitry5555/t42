@@ -10,8 +10,8 @@ class TestConsumer(AsyncWebsocketConsumer):
 		self.screen_height = 400
 		self.ball_x = self.screen_width / 2
 		self.ball_y = self.screen_height / 2
-		self.move_x = 8  # Увеличьте значение для ускорения
-		self.move_y = 6  # Увеличьте значение для ускорения
+		self.move_x = 8  # speed
+		self.move_y = 6  # speed
 		self.raquet_1 = self.screen_height / 2
 		self.raquet_2 = self.screen_height / 2
 		self.score_1 = 0
@@ -68,4 +68,4 @@ class TestConsumer(AsyncWebsocketConsumer):
 			await self.send(text_data=self.count)
 
 			# delay before update
-			await asyncio.sleep(0.03)  # Уменьшите значение для ускорения обновлений
+			await asyncio.sleep(0.03)  # reduce speed

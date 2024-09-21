@@ -1,5 +1,4 @@
 from django.db import models
-# from django.contrib.auth.models import User
 
 # class Users(models.Model):
 # 	nickname = models.CharField(max_length=100)
@@ -8,6 +7,14 @@ from django.db import models
 # 	avatar = models.CharField(max_length=200, default='')
 # 	created_at = models.DateTimeField(auto_now_add=True)
 # 	updated_at = models.DateTimeField(auto_now=True)
+
+class Profile(models.Model):
+	id = models.AutoField(primary_key=True)
+	is_online = models.BooleanField(default=False)
+	user_id = models.IntegerField()  # Не связываем напрямую с моделью User
+	# user = models.OneToOneField(User, on_delete=models.CASCADE)  # Связь с моделью User
+	avatar_url = models.URLField(max_length=200, blank=True, null=True)
+	created_at = models.DateTimeField(auto_now_add=True)
 
 class Games(models.Model):
 	user_one_id = models.IntegerField()
@@ -19,5 +26,5 @@ class Games(models.Model):
 	status = models.CharField(max_length=100)
 
 class Image(models.Model):
-    image = models.ImageField(upload_to='images/')
-    uploaded_at = models.DateTimeField(auto_now_add=True)
+	image = models.ImageField(upload_to='images/')
+	uploaded_at = models.DateTimeField(auto_now_add=True)

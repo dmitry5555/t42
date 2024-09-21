@@ -1,43 +1,63 @@
 'use client'
 
-import { useState } from 'react';
 import Link from 'next/link';
+import { useState } from 'react';
+import { setToken } from '@/actions/db';
 
 export default function Home() {
 
 	// const [otpStep, setOtpStep] = useState(0);
 	// const [tokenOk, setTokenOk] = useState(false);
-	const [username, setUsername] = useState('');
+	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
   
-	const handleSignIn = async () => {
-		try {
-			// await signIn(username, password)
-			// await requestOtp(username, password)
-			// await setToken(username, password)
-			// await getUser('1')
-			// const res = await getUser('42')
-			// setTokenOk(true)
-			// console.log('res:', res)
-			// setTokenOk(true)
-			// redirect('/pong')
-		} catch (error) {
-			console.error('Error logging in:', error);
-			alert('wrong email/password')
-		}
-	};
+	// const handleSignIn = async () => {
+	// 	signIn(username, password)
+	// }
 
+	const handleSignIn = async () => {
+        // if (password !== passwordAgain) {
+        //     setPasswordsMatch(false);
+        //     return;
+        // }
+		const userData = {
+            username: email,
+            password: password,
+            // email: username,
+        };
+
+		const response = await fetch('/api/token/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(userData),
+		});
+
+		if (response.ok) {
+			console.log('JWT выдан!');
+			const access_token = await response.json();
+			setToken(access_token)
+			console.log('response', access_token);
+
+			// cookies().set('access_token', access_token.access)
+			// cookies().set('refresh_token', access_token.refresh)
+		} else {
+			console.error('Ошибка 1:', response.statusText);
+		}
+	}
 	const handleSignOut = () => {
 		// setTokenOk(false);
 	};
 
     return (
         <div className='gap-4 flex flex-col w-96 mx-auto py-4'>
+			<h2>sign in</h2>
 
 			<div className='mx-auto gap-3 flex flex-col'>
 				<div className='flex flex-row items-center'>
 					<label className='w-1/2'>Email: </label>
-					<input className='w-1/2 text-black px-2 py-1' type="text"  value={username} onChange={(e) => setUsername(e.target.value)} />
+					<input className='w-1/2 text-black px-2 py-1' type="text"  value={email} onChange={(e) => setEmail(e.target.value)} />
 				</div>	
 				<div className='flex flex-row items-center'>
 					<label className='w-1/2'>Password: </label>

@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework import viewsets
-from .models import Games
-from .serializers import UserSerializer, GameSerializer
+from .models import Games, Profile
+from .serializers import UserSerializer, GameSerializer, ProfileSerializer
 from django.contrib.auth.models import User
 
 
@@ -19,11 +19,21 @@ import requests
 from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Image
 from .serializers import ImageSerializer
+from rest_framework.permissions import AllowAny
 
 
 class UserCreateView(generics.CreateAPIView):
 	queryset = User.objects.all()
 	serializer_class = UserSerializer
+	authentication_classes = []  # Отключение всех методов аутентификации (включая JWT)
+	permission_classes = [AllowAny]
+	# permission_classes = [AllowAny]
+
+	# если не активен при создании
+	# def perform_create(self, serializer):
+	# 	user = serializer.save()
+	# 	user.is_active = True
+	# 	user.save()
 
 class GameViewSet(viewsets.ModelViewSet):
 	queryset = Games.objects.all()
@@ -56,9 +66,9 @@ def send_email(email, otp):
 
 # image upload
 class ImageViewSet(viewsets.ModelViewSet):
-    queryset = Image.objects.all()
-    serializer_class = ImageSerializer
-    parser_classes = (MultiPartParser, FormParser)
+	queryset = Image.objects.all()
+	serializer_class = ImageSerializer
+	parser_classes = (MultiPartParser, FormParser)
 
 class GetOTPView(APIView):
 	# permission_classes = [AllowAny]  # Разрешить доступ без аутентификации
@@ -90,3 +100,7 @@ class VerifyOTPView(APIView):
 				return Response({'message': 'OTP verified successfully'}, status=status.HTTP_200_OK)
 			return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ProfileViewSet(viewsets.ModelViewSet):
+	queryset = Profile.objects.all()
+	serializer_class = ProfileSerializer

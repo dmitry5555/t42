@@ -1,4 +1,3 @@
-import Game from "@/components/GameRoom";
 import Settings from "@/components/Settings";
 
 
